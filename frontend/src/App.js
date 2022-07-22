@@ -1,13 +1,13 @@
 import Layout from "./components/Layout";
 import GlobalStyles from "./styles/GlobalStyles";
-import { VideoContext } from "./contexts/VideoContext";
+import { VideoContextProvider } from "./contexts/VideoContext";
 
 function App() {
   return (
     <>
-    <VideoContext>
+    <VideoContextProvider>
      <Layout />
-    </VideoContext>
+    </VideoContextProvider>
     <GlobalStyles />
     </>
   );
