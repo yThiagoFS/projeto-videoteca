@@ -10,10 +10,12 @@ export default function VideoList(){
 
     const [videos, setVideos] = useState([])
 
+   
     useEffect(() => {
         api.get("videos")
         .then(({data}) => {
             setVideos(data.videos)
+            
         })
     // eslint-disable-next-line react-hooks/exhaustive-deps
     } , [])

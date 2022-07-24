@@ -31,8 +31,8 @@ export default function FormModal(){
                         <input type="text" id="title" value={title} onChange={titleHandler}/>
                         </InputGroup>
                         <InputGroup>
-                        <label htmlFor="link" value={link} onChange={linkHandler}>Link</label>
-                        <input type="text" id="link"/>
+                        <label htmlFor="link">Link</label>
+                        <input type="text" id="link" value={link} onChange={linkHandler}/>
                         </InputGroup>
                     </FormMain>
 

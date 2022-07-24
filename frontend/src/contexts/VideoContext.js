@@ -9,12 +9,32 @@ export function VideoContextProvider({children}){
     const [openFormModal, setOpenFormModal] = useState(false)
     const [title, setTitle] = useState('')
     const [link, setLink] = useState('')
+    const [id, setId] = useState(false)
+    
+
+    function handleLike(id){
+        api.patch(`videos/${id}`)
+    }
+    function handleDelete(id){
+        api.delete(`videos/${id}`)
+    }
+    function handleEdit(videoId, videoTitle, videoLink){
+        setTitle(videoTitle)
+        setLink(videoLink)
+        setId(videoId)
+
+        setOpenFormModal(true)
+    }
 
     function handleAdd(){
         setOpenFormModal(true)
     }
     function handleClose(){
+        if(title) setTitle('')
+        if(link) setLink('')
         setOpenFormModal(false)
+
+        
     }
     function titleHandler(event){
         setTitle(event.target.value)
@@ -26,9 +46,15 @@ export function VideoContextProvider({children}){
         event.preventDefault()
 
         const video = {
-            title, link
+            title,
+            link
         }
-        api.post("videos", video)
+        if(id){
+            api.put(`videos/${id}`, video)
+        } else{
+            api.post("videos", video)
+        }
+
 
         setOpenFormModal(false)
     }
@@ -37,13 +63,18 @@ export function VideoContextProvider({children}){
         <VideoContext.Provider 
         value={{handleAdd, 
             handleClose, 
+            handleSubmit,
+            handleEdit,
+            handleLike,
+            handleDelete,
+            id, 
             title, 
-            setTitle, 
             link, 
-            setLink,
             titleHandler,
             linkHandler,
-            handleSubmit,
+            setTitle, 
+            setLink,
+            setId,
             }}>
             {children}
             {openFormModal && <FormModal />}
