@@ -1,4 +1,5 @@
 import { createContext, useState } from "react"
+import { useAxios } from "../hooks/useAxios"
 import FormModal from "../components/FormModal"
 
 import api from "../services/api"
@@ -6,6 +7,8 @@ import api from "../services/api"
 export const VideoContext = createContext()
 
 export function VideoContextProvider({children}){
+    const { data, mutate } = useAxios("videos")
+
     const [openFormModal, setOpenFormModal] = useState(false)
     const [title, setTitle] = useState('')
     const [link, setLink] = useState('')
@@ -14,9 +17,58 @@ export function VideoContextProvider({children}){
 
     function handleLike(id){
         api.patch(`videos/${id}`)
+
+        const updatedVideos = {
+            videos:data.videos?.map((video) => {
+                if(video._id === id){
+                    return { ...video, title:video.title, link:video.link, liked: !video.liked}
+                }
+                return video
+            })
+        }
+        mutate(updatedVideos, false)
+
     }
     function handleDelete(id){
         api.delete(`videos/${id}`)
+
+        const updatedVideos = {
+            videos: data.videos?.filter((video) => video._id !== id)
+        }
+
+        mutate(updatedVideos, false)
+    }
+    function handleSubmit(event){
+        event.preventDefault()
+
+        const video = {
+            title,
+            link
+        }
+        if(id){
+            api.put(`videos/${id}`, video)
+
+            // const updatedVideos = {
+            //     videos: data.videos?.map((video) => {
+            //         if(video._id === id){
+            //             return {...video, title, link}
+            //         }
+            //         return video
+            //     })
+            // }
+            // mutate(updatedVideos, false)
+        } else{
+            api.post("videos", video)
+
+            // const updatedVideos = {
+            //     videos: {...data.videos, video}
+            // }
+
+            // mutate(updatedVideos, false)
+        }
+
+
+        setOpenFormModal(false)
     }
     function handleEdit(videoId, videoTitle, videoLink){
         setTitle(videoTitle)
@@ -27,6 +79,8 @@ export function VideoContextProvider({children}){
     }
 
     function handleAdd(){
+        if(title) setTitle('')
+        if(link) setLink('')
         setOpenFormModal(true)
     }
     function handleClose(){
@@ -41,22 +95,6 @@ export function VideoContextProvider({children}){
     }
     function linkHandler(event){
         setLink(event.target.value)
-    }
-    function handleSubmit(event){
-        event.preventDefault()
-
-        const video = {
-            title,
-            link
-        }
-        if(id){
-            api.put(`videos/${id}`, video)
-        } else{
-            api.post("videos", video)
-        }
-
-
-        setOpenFormModal(false)
     }
 
     return (
