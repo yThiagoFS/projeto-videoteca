@@ -25,8 +25,8 @@ export default function VideoList(){
             <VideoListWrapper>
                 {videos?.map((video) => (
                     <Video 
-                    key={video.__id}
-                    id={video.__id}
+                    key={video._id}
+                    id={video._id}
                     title={video.title}
                     link={video.link}
                     liked={video.liked}
