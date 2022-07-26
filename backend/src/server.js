@@ -1,12 +1,4 @@
-/*API em node funciona baseada em ROTA, quando acessar uma rota especifica, algo será executado.*/
 
-
-
-// GET: buscar uma informação
-// Post: criar uma informação
-// PUT: editar uma informação por completo
-// PATCH: modificar apenas uma parte da informação
-// DELETE: deletar uma informação
 
 require('dotenv').config()
 
